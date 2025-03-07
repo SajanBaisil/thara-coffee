@@ -2,6 +2,7 @@ class ImageAssets {
   static const String largeBg = 'assets/png/large_bg.png';
   static const String smallBg = 'assets/png/small_bg.png';
   static const String logoHeader = 'assets/png/logo_header.png';
+  static const String tharaCoffeeTruck = 'assets/png/thara_coffee.png';
 }
 
 class SvgAssets {
@@ -13,6 +14,11 @@ class SvgAssets {
   static const String account = 'assets/svg/account.svg';
   static const String location = 'assets/svg/location.svg';
   static const String hamburger = 'assets/svg/hamburger.svg';
+  static const String icedTea = 'assets/svg/iced_tea.svg';
+  static const String mocha = 'assets/svg/mocha.svg';
+  static const String expresso = 'assets/svg/expresso.svg';
+  static const String doppio = 'assets/svg/doppio.svg';
+  static const String cappuccino = 'assets/svg/cappuccino.svg';
 }
 
 class LottieAssets {

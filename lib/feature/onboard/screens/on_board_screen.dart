@@ -37,95 +37,101 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
         body: Stack(
           children: [
             Image.asset(ImageAssets.largeBg),
-            Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                320.verticalSpace,
-                Image.asset(ImageAssets.logoHeader),
-                100.verticalSpace,
-                CarouselSlider(
-                  options: CarouselOptions(
-                    height: KHeight.h260,
-                    autoPlay: true,
-                    enlargeCenterPage: true,
-                    aspectRatio: 16 / 9,
-                    enlargeFactor: 0.3,
-                    autoPlayInterval: const Duration(seconds: 5),
-                    viewportFraction: 0.9,
-                    onPageChanged: (index, reason) {
-                      selectedIndex.value = index;
-                    },
-                  ),
-                  items: [
-                    SliderWidget(
-                      subTitle:
-                          'The Coffee Caravan brings the delightful aroma of freshly brewed coffee to unexpected locations.',
-                      title: 'Experience coffee on the move',
+            SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  320.verticalSpace,
+                  Image.asset(ImageAssets.logoHeader),
+                  100.verticalSpace,
+                  CarouselSlider(
+                    options: CarouselOptions(
+                      height: KHeight.h260,
+                      autoPlay: true,
+                      enlargeCenterPage: true,
+                      aspectRatio: 16 / 9,
+                      enlargeFactor: 0.3,
+                      autoPlayInterval: const Duration(seconds: 5),
+                      viewportFraction: 0.9,
+                      onPageChanged: (index, reason) {
+                        selectedIndex.value = index;
+                      },
                     ),
-                    SliderWidget(
-                        title: 'Curated artizen coffee Roasting.',
+                    items: [
+                      SliderWidget(
                         subTitle:
-                            'Indulge in the Art of Exceptional Coffee – Where Every Bean Tells a Story.'),
-                    SliderWidget(
-                        title: 'Revitalize your senses, savor the moment',
-                        subTitle:
-                            'Savor the Brew, Ignite the Soul: Your Journey with Coffee Curing'),
-                    SliderWidget(
-                        title: 'Brewing perfection from Farm to Cup',
-                        subTitle:
-                            'With organized rows optimized for efficient cultivation, our plantations ensure the highest quality beans.')
-                  ],
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: KPadding.h16),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: PrimaryButton(
-                          color: ColorManager.primary,
-                          borderColor: ColorManager.whiteColor,
-                          controller: buttonController,
-                          key: Key('login'),
-                          text: 'Login',
-                          onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => const LoginScreen()));
-                          },
-                          isOutLined: true,
-                          borderRadius: KRadius.r100,
-                        ),
+                            'The Coffee Caravan brings the delightful aroma of freshly brewed coffee to unexpected locations.',
+                        title: 'Experience coffee on the move',
                       ),
+                      SliderWidget(
+                          title: 'Curated artizen coffee Roasting.',
+                          subTitle:
+                              'Indulge in the Art of Exceptional Coffee – Where Every Bean Tells a Story.'),
+                      SliderWidget(
+                          title: 'Revitalize your senses, savor the moment',
+                          subTitle:
+                              'Savor the Brew, Ignite the Soul: Your Journey with Coffee Curing'),
+                      SliderWidget(
+                          title: 'Brewing perfection from Farm to Cup',
+                          subTitle:
+                              'With organized rows optimized for efficient cultivation, our plantations ensure the highest quality beans.')
                     ],
                   ),
-                ),
-                40.verticalSpace,
-                ValueListenableBuilder(
-                    valueListenable: selectedIndex,
-                    builder: (context, index, _) {
-                      return AnimatedSmoothIndicator(
-                        effect: ExpandingDotsEffect(
-                          dotColor:
-                              colorScheme(context).onSecondary.withOpacity(0.5),
-                          dotWidth: serviceLocator<ResponsiveHelper>().isTablet
-                              ? 4.w
-                              : 12.w,
-                          dotHeight: serviceLocator<ResponsiveHelper>().isTablet
-                              ? 4.w
-                              : 8.h,
-                          spacing: serviceLocator<ResponsiveHelper>().isTablet
-                              ? 3.w
-                              : 6.w,
-                          activeDotColor: colorScheme(context).onSecondary,
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: KPadding.h16),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: PrimaryButton(
+                            color: ColorManager.primary,
+                            borderColor: ColorManager.whiteColor,
+                            controller: buttonController,
+                            key: Key('login'),
+                            text: 'Login',
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          const LoginScreen()));
+                            },
+                            isOutLined: true,
+                            borderRadius: KRadius.r100,
+                          ),
                         ),
-                        activeIndex: index,
-                        count: 4,
-                      );
-                    })
-              ],
+                      ],
+                    ),
+                  ),
+                  40.verticalSpace,
+                  ValueListenableBuilder(
+                      valueListenable: selectedIndex,
+                      builder: (context, index, _) {
+                        return AnimatedSmoothIndicator(
+                          effect: ExpandingDotsEffect(
+                            dotColor: colorScheme(context)
+                                .onSecondary
+                                .withOpacity(0.5),
+                            dotWidth:
+                                serviceLocator<ResponsiveHelper>().isTablet
+                                    ? 4.w
+                                    : 12.w,
+                            dotHeight:
+                                serviceLocator<ResponsiveHelper>().isTablet
+                                    ? 4.w
+                                    : 8.h,
+                            spacing: serviceLocator<ResponsiveHelper>().isTablet
+                                ? 3.w
+                                : 6.w,
+                            activeDotColor: colorScheme(context).onSecondary,
+                          ),
+                          activeIndex: index,
+                          count: 4,
+                        );
+                      })
+                ],
+              ),
             )
           ],
         ));

@@ -20,4 +20,7 @@ class ColorManager {
   static const Color errorColor = Color(0xFFBB262C);
   static const Color lightGrey2 = Color(0xFFEFEFEF);
   static const Color grey = Color.fromRGBO(177, 177, 177, 0.50);
+  static const Color f1a01d = Color(0xFFF1A01D);
+  static const Color grey2 = Color(0xFF979797);
+  static const Color f1f1f1 = Color(0xFFF1F1F1);
 }

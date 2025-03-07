@@ -39,7 +39,7 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: ColorManager.whiteColor,
+      resizeToAvoidBottomInset: false,
       body: ValueListenableBuilder(
           valueListenable: selectedIndex,
           builder: (context, index, _) {
