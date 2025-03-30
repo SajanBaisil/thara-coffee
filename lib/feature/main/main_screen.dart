@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:thara_coffee/feature/account/account_screen.dart';
 import 'package:thara_coffee/feature/cart/cart_screen.dart';
 import 'package:thara_coffee/feature/home/home_screen.dart';
+import 'package:thara_coffee/feature/home/logic/home_bloc/home_bloc.dart';
+import 'package:thara_coffee/feature/home/logic/home_bloc/home_event.dart';
 import 'package:thara_coffee/feature/orders/orders_screen.dart';
 import 'package:thara_coffee/shared/components/app_strings.dart';
 import 'package:thara_coffee/shared/components/assets_manager.dart';
@@ -31,46 +34,50 @@ class _MainScreenState extends State<MainScreen> {
 
   final mainScreenViews = [
     const HomeScreen(),
-    const CartScreen(),
     const OrdersScreen(),
+    const CartScreen(),
     const AccountScreen(),
   ];
 
   @override
+  void initState() {
+    super.initState();
+    context.read<HomeBloc>().add(CategoryFetchEvent());
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      body: ValueListenableBuilder(
-          valueListenable: selectedIndex,
-          builder: (context, index, _) {
-            return IndexedStack(index: index, children: mainScreenViews);
-          }),
-      bottomNavigationBar: ValueListenableBuilder(
-          valueListenable: selectedIndex,
-          builder: (context, value, _) {
-            return BottomNavigationBar(
-              onTap: onTapBottomNavBarItems,
-              currentIndex: value,
-              items: bottomItems
-                  .map((item) => BottomNavigationBarItem(
-                        icon: item.icon,
-                        label: item.label,
-                        activeIcon: item.activeIcon,
-                      ))
-                  .toList(),
-            );
-          }),
+    return BlocProvider(
+      create: (context) => HomeBloc(),
+      child: Scaffold(
+        backgroundColor: ColorManager.whiteColor,
+        resizeToAvoidBottomInset: false,
+        body: ValueListenableBuilder(
+            valueListenable: selectedIndex,
+            builder: (context, index, _) {
+              return mainScreenViews[index];
+            }),
+        bottomNavigationBar: ValueListenableBuilder(
+            valueListenable: selectedIndex,
+            builder: (context, value, _) {
+              return BottomNavigationBar(
+                elevation: 3,
+                onTap: onTapBottomNavBarItems,
+                currentIndex: value,
+                items: bottomItems
+                    .map((item) => BottomNavigationBarItem(
+                          icon: item.icon,
+                          label: item.label,
+                          activeIcon: item.activeIcon,
+                        ))
+                    .toList(),
+              );
+            }),
+      ),
     );
   }
 
   void onTapBottomNavBarItems(int value) {
-    // if (selectedIndex.value == value) {
-    //   serviceLocator<List<ScrollController>>(
-    //           instanceName: PageControllers.scrollControllers)[value]
-    //       .animateTo(0,
-    //           duration: Duration(milliseconds: 300), curve: Curves.easeInOut);
-    // }
-
     selectedIndex.value = value;
 
     if (FocusScope.of(context).hasFocus) {

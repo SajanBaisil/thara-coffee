@@ -10,7 +10,7 @@ import 'package:thara_coffee/shared/components/size_manager.dart';
 import 'package:thara_coffee/shared/components/theme/color_manager.dart';
 import 'package:thara_coffee/shared/components/theme/theme_getters.dart';
 import 'package:thara_coffee/shared/domain/constants/global_variables.dart';
-import 'package:thara_coffee/shared/router/responsive_helper.dart';
+import 'package:thara_coffee/shared/router/responsive_helper.dart' as res;
 
 class OnBoardingScreen extends StatefulWidget {
   const OnBoardingScreen({super.key});
@@ -23,6 +23,17 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
   final buttonController = MultiStateButtonController();
   final PageController controller = PageController();
   final ValueNotifier<int> selectedIndex = ValueNotifier(0);
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final shortestSide = MediaQuery.of(context).size.shortestSide;
+    serviceLocator<res.ResponsiveHelper>()
+      ..deviceType =
+          shortestSide < 600 ? res.DeviceType.mobile : res.DeviceType.tablet
+      ..deviceHeight = MediaQuery.of(context).size.height;
+  }
+
   @override
   void dispose() {
     buttonController.dispose();
@@ -32,23 +43,50 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final isSmallScreen = serviceLocator<res.ResponsiveHelper>().isSmallScreen;
+    final isLargeScreen = serviceLocator<res.ResponsiveHelper>().isLargeScreen;
+    final isTallScreen = serviceLocator<res.ResponsiveHelper>().isTallScreen;
     return Scaffold(
         backgroundColor: ColorManager.primary,
         body: Stack(
           children: [
-            Image.asset(ImageAssets.largeBg),
-            SingleChildScrollView(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  320.verticalSpace,
-                  Image.asset(ImageAssets.logoHeader),
-                  100.verticalSpace,
+            Positioned.fill(
+              child: IgnorePointer(
+                child: SizedBox(
+                  height: MediaQuery.of(context).size.height,
+                  child: MediaQuery.removePadding(
+                    context: context,
+                    removeTop: true,
+                    child: MediaQuery.removeViewInsets(
+                      context: context,
+                      removeBottom: true,
+                      child: Image.asset(
+                        ImageAssets.largeBg,
+                        width: double.infinity,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            CustomScrollView(slivers: [
+              SliverList(
+                delegate: SliverChildListDelegate([
+                  isSmallScreen
+                      ? 250.verticalSpace
+                      : isLargeScreen
+                          ? 240.verticalSpace
+                          : (isTallScreen && !isLargeScreen)
+                              ? 300.verticalSpace
+                              : 320.verticalSpace,
+                  Image.asset(
+                    ImageAssets.logoHeader,
+                  ),
+                  isSmallScreen ? 90.verticalSpace : 100.verticalSpace,
                   CarouselSlider(
                     options: CarouselOptions(
-                      height: KHeight.h260,
+                      height: isSmallScreen ? KHeight.h250 : KHeight.h260,
                       autoPlay: true,
                       enlargeCenterPage: true,
                       aspectRatio: 16 / 9,
@@ -108,31 +146,34 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                   ValueListenableBuilder(
                       valueListenable: selectedIndex,
                       builder: (context, index, _) {
-                        return AnimatedSmoothIndicator(
-                          effect: ExpandingDotsEffect(
-                            dotColor: colorScheme(context)
-                                .onSecondary
-                                .withOpacity(0.5),
-                            dotWidth:
-                                serviceLocator<ResponsiveHelper>().isTablet
-                                    ? 4.w
-                                    : 12.w,
-                            dotHeight:
-                                serviceLocator<ResponsiveHelper>().isTablet
-                                    ? 4.w
-                                    : 8.h,
-                            spacing: serviceLocator<ResponsiveHelper>().isTablet
-                                ? 3.w
-                                : 6.w,
-                            activeDotColor: colorScheme(context).onSecondary,
+                        return Center(
+                          child: AnimatedSmoothIndicator(
+                            effect: ExpandingDotsEffect(
+                              dotColor: colorScheme(context)
+                                  .onSecondary
+                                  .withOpacity(0.5),
+                              dotWidth: serviceLocator<res.ResponsiveHelper>()
+                                      .isTablet
+                                  ? 4.w
+                                  : 12.w,
+                              dotHeight: serviceLocator<res.ResponsiveHelper>()
+                                      .isTablet
+                                  ? 4.w
+                                  : 8.h,
+                              spacing: serviceLocator<res.ResponsiveHelper>()
+                                      .isTablet
+                                  ? 3.w
+                                  : 6.w,
+                              activeDotColor: colorScheme(context).onSecondary,
+                            ),
+                            activeIndex: index,
+                            count: 4,
                           ),
-                          activeIndex: index,
-                          count: 4,
                         );
-                      })
-                ],
+                      }),
+                ]),
               ),
-            )
+            ])
           ],
         ));
   }
@@ -145,14 +186,16 @@ class SliderWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isSmallScreen = serviceLocator<res.ResponsiveHelper>().isSmallScreen;
+
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
         Text(
           title,
-          style: textTheme(context)
-              .displayLarge
-              ?.copyWith(fontSize: KFontSize.f35, fontWeight: FontWeight.bold),
+          style: textTheme(context).displayLarge?.copyWith(
+              fontSize: isSmallScreen ? KFontSize.f30 : KFontSize.f35,
+              fontWeight: FontWeight.bold),
         ),
         12.verticalSpace,
         IntrinsicHeight(

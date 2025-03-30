@@ -23,4 +23,24 @@ class ColorManager {
   static const Color f1a01d = Color(0xFFF1A01D);
   static const Color grey2 = Color(0xFF979797);
   static const Color f1f1f1 = Color(0xFFF1F1F1);
+  static const Color fff6c0 = Color(0xFFFFF6C0);
+  static const Color grey8F8F8F = Color(0xFF8F8F8F);
+  static const Color eee = Color(0xFFEEEEEE);
+  static const Color grey484848 = Color(0xFF484848);
+  static const Color grey545454 = Color(0xFF545454);
+  static const Color grey4F4F4F = Color(0xFF4F4F4F);
+  static const Color grey8D8D8D = Color(0xFF8D8D8D);
+  static const Color f9f9f9 = Color(0xFFF9F9F9);
+  static const Color fc545b = Color(0xFFFC545B);
+  static const Color black70 = Color.fromRGBO(0, 0, 0, 0.70);
+  static const Color greenColor = Color(0xFF009F30);
+  static const Color greenColorWithAlpha = Color.fromRGBO(0, 159, 48, 0.20);
+  static const Color orangeColor = Color(0xFFED6300);
+  static const Color orangeColorWithAlpha = Color.fromRGBO(237, 99, 0, 0.20);
+  static const Color redColorWithAlpha = Color.fromRGBO(223, 33, 41, 0.20);
+  static const Color lightGreyColor2 = Color(0xFFF8F7F7);
+  static const Color darkGreyColor = Color(0xFF454545);
+  static const Color ffebeb = Color(0xFFFFEBED);
+  static const Color redColor = Color(0xFFFD2F20);
+  static const Color fdf1f1 = Color.fromARGB(255, 250, 154, 160);
 }

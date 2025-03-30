@@ -146,7 +146,7 @@ class LabeledTextField extends StatelessWidget {
             style: textStyle ??
                 theme.textTheme.bodyMedium?.copyWith(
                     fontSize: KFontSize.f14,
-                    color: inputTextColor ?? ColorManager.primary,
+                    color: inputTextColor ?? ColorManager.textFieldTextColor,
                     decoration: TextDecoration.none,
                     decorationThickness: 0),
             decoration: decoration ??
@@ -157,6 +157,7 @@ class LabeledTextField extends StatelessWidget {
                   counterText: counterText,
                   prefixIcon: prefixIcon,
                   prefix: leading,
+                  
                   prefixStyle: textStyle ??
                       theme.textTheme.bodyMedium?.copyWith(
                           fontSize: KFontSize.f14,

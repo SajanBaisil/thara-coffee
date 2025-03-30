@@ -282,6 +282,9 @@ class KPadding {
   static final h1 = 1.h;
   // horixontal padding
   static final h150p3 = 150.9.w;
+  // 19
+  static final h170 = 170.w;
+  static final h19 = 19.w;
   static final h151 = 151.w;
   static final h155 = 155.w;
   static final h10 = 10.w;
@@ -306,6 +309,8 @@ class KPadding {
   static final h23 = 23.w;
   static final h24 = 24.w;
   static final h25 = 25.w;
+  // 200
+  static final h200 = 200.w;
   static final h250 = 250.h;
   static final h3 = 3.w;
   static final h32 = 32.w;
