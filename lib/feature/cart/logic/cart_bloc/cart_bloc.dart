@@ -22,6 +22,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
         final existingItem = currentItems[existingItemIndex];
         currentItems[existingItemIndex] = CartItem(
           id: existingItem.id,
+          productName: existingItem.productName,
           // name: existingItem.name,
           price: existingItem.price,
           quantity: existingItem.quantity + event.item.quantity,
@@ -58,6 +59,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
           final item = currentItems[itemIndex];
           currentItems[itemIndex] = CartItem(
             id: item.id,
+            productName: item.productName,
             // name: item.name,
             price: item.price,
             quantity: event.quantity,
@@ -80,9 +82,15 @@ class CartBloc extends Bloc<CartEvent, CartState> {
       (sum, item) => sum + (item.price * item.quantity),
     );
 
+    final totalItems = items.fold<int>(
+      0,
+      (sum, item) => sum + item.quantity,
+    );
+
     emit(state.copyWith(
       items: items,
       totalAmount: totalAmount,
+      totalSelectedItems: totalItems,
     ));
   }
 }

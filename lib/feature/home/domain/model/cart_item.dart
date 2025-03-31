@@ -4,14 +4,15 @@ class CartItem {
   final double price;
   final int quantity;
   final String? customerNote;
+  final String? productName;
 
-  CartItem({
-    required this.id,
-    this.discount,
-    required this.price,
-    required this.quantity,
-    this.customerNote,
-  });
+  CartItem(
+      {required this.id,
+      this.discount,
+      required this.price,
+      required this.quantity,
+      this.customerNote,
+      required this.productName});
 
   double get totalPrice => price * quantity;
 
@@ -22,6 +23,7 @@ class CartItem {
       'price_unit': price,
       'qty': quantity,
       'customer_note': customerNote,
+      'name': productName
     };
   }
 
@@ -32,6 +34,7 @@ class CartItem {
       price: json['price_unit'],
       quantity: json['qty'],
       customerNote: json['customer_note'],
+      productName: json['name'],
     );
   }
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:thara_coffee/feature/cart/logic/cart_bloc/cart_bloc.dart';
 import 'package:thara_coffee/feature/home/logic/home_bloc/home_bloc.dart';
 import 'package:thara_coffee/feature/login/logic/login_bloc/login_bloc.dart';
 import 'package:thara_coffee/feature/onboard/screens/on_board_screen.dart';
@@ -39,6 +40,9 @@ class _MyAppState extends State<MyApp> {
                 ),
                 BlocProvider(
                   create: (context) => HomeBloc(),
+                ),
+                BlocProvider(
+                  create: (context) => CartBloc(),
                 ),
               ],
               child: GestureDetector(
