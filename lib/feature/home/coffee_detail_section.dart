@@ -12,6 +12,7 @@ import 'package:thara_coffee/feature/home/logic/home_bloc/home_bloc.dart';
 import 'package:thara_coffee/feature/home/logic/home_bloc/home_event.dart';
 import 'package:thara_coffee/feature/home/logic/home_bloc/home_state.dart';
 import 'package:thara_coffee/shared/components/assets_manager.dart';
+import 'package:thara_coffee/shared/components/common_shimmer.dart';
 import 'package:thara_coffee/shared/components/datafetch_status.dart';
 import 'package:thara_coffee/shared/components/labeled_textfield.dart';
 import 'package:thara_coffee/shared/components/primary_button.dart';
@@ -97,7 +98,15 @@ class _CoffeeDetailSectionState extends State<CoffeeDetailSection> {
                     children: [
                       ClipRRect(
                           borderRadius: BorderRadius.circular(KRadius.r35),
-                          child: _buildImage(state.singleProduct?.image ?? "")),
+                          child: state.singleProductFetchStatus ==
+                                  DataFetchStatus.waiting
+                              ? Image.asset(
+                                  ImageAssets.coffee,
+                                  width: double.infinity,
+                                  height: KHeight.h350,
+                                  fit: BoxFit.cover,
+                                )
+                              : _buildImage(state.singleProduct?.image ?? "")),
                       CloseButton(),
                       Column(
                         children: [
@@ -112,12 +121,24 @@ class _CoffeeDetailSectionState extends State<CoffeeDetailSection> {
                                 Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(
-                                      state.singleProduct?.name ?? "",
-                                      style: textTheme(context)
-                                          .displayMedium
-                                          ?.copyWith(fontSize: KFontSize.f20),
-                                    ),
+                                    state.singleProductFetchStatus ==
+                                            DataFetchStatus.waiting
+                                        ? CommonShimmer(
+                                            child: Text(
+                                              'Coffee',
+                                              style: textTheme(context)
+                                                  .displayMedium
+                                                  ?.copyWith(
+                                                      fontSize: KFontSize.f20),
+                                            ),
+                                          )
+                                        : Text(
+                                            state.singleProduct?.name ?? "",
+                                            style: textTheme(context)
+                                                .displayMedium
+                                                ?.copyWith(
+                                                    fontSize: KFontSize.f20),
+                                          ),
                                     // Text(
                                     //   'with chocolate',
                                     //   style: textTheme(context)
@@ -126,26 +147,10 @@ class _CoffeeDetailSectionState extends State<CoffeeDetailSection> {
                                     // ),
                                   ],
                                 ),
-                                Container(
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: KPadding.h6,
-                                      vertical: KPadding.v2),
-                                  margin: EdgeInsets.symmetric(
-                                      vertical: KPadding.v10,
-                                      horizontal: KPadding.h10),
-                                  decoration: BoxDecoration(
-                                      color: ColorManager.fff6c0,
-                                      borderRadius:
-                                          BorderRadius.circular(KRadius.r100)),
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      SvgPicture.asset(SvgAssets.star),
-                                      Text('4.8'),
-                                      5.horizontalSpace,
-                                    ],
-                                  ),
-                                ),
+                                state.singleProductFetchStatus ==
+                                        DataFetchStatus.waiting
+                                    ? RatingWidgetShimmer()
+                                    : RatingWidget(),
                               ],
                             ),
                           ),
@@ -238,15 +243,36 @@ class _CoffeeDetailSectionState extends State<CoffeeDetailSection> {
                                     left: KPadding.h15,
                                     right: KPadding.h15,
                                   ),
-                                  child: Text(
-                                      state.singleProduct?.description ?? "",
-                                      style: textTheme(context)
-                                          .labelMedium
-                                          ?.copyWith(
-                                              color: ColorManager.grey545454,
-                                              fontSize: isSmallScreen
-                                                  ? KFontSize.f10
-                                                  : KFontSize.f13)),
+                                  child: state.singleProductFetchStatus ==
+                                          DataFetchStatus.waiting
+                                      ? CommonShimmer(
+                                          child: Text(
+                                              '''It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English.''',
+                                              style: textTheme(context)
+                                                  .labelMedium
+                                                  ?.copyWith(
+                                                      color: ColorManager
+                                                          .grey545454,
+                                                      fontSize: isSmallScreen
+                                                          ? KFontSize.f10
+                                                          : KFontSize.f13)),
+                                        )
+                                      : state.singleProduct?.description
+                                                  .isNullOrEmpty ??
+                                              false
+                                          ? SizedBox()
+                                          : Text(
+                                              state.singleProduct
+                                                      ?.description ??
+                                                  "",
+                                              style: textTheme(context)
+                                                  .labelMedium
+                                                  ?.copyWith(
+                                                      color: ColorManager
+                                                          .grey545454,
+                                                      fontSize: isSmallScreen
+                                                          ? KFontSize.f10
+                                                          : KFontSize.f13)),
                                 ),
                                 15.verticalSpace,
                                 Padding(
@@ -258,16 +284,33 @@ class _CoffeeDetailSectionState extends State<CoffeeDetailSection> {
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Text(
-                                        '₹ ${state.singleProduct?.price}',
-                                        style: textTheme(context)
-                                            .titleMedium
-                                            ?.copyWith(fontSize: KFontSize.f18),
-                                      ),
+                                      state.singleProductFetchStatus ==
+                                              DataFetchStatus.waiting
+                                          ? CommonShimmer(
+                                              child: Text(
+                                                '₹ 149',
+                                                style: textTheme(context)
+                                                    .titleMedium
+                                                    ?.copyWith(
+                                                        fontSize:
+                                                            KFontSize.f18),
+                                              ),
+                                            )
+                                          : Text(
+                                              '₹ ${state.singleProduct?.price}',
+                                              style: textTheme(context)
+                                                  .titleMedium
+                                                  ?.copyWith(
+                                                      fontSize: KFontSize.f18),
+                                            ),
                                       Row(
                                         children: [
                                           InkWell(
-                                            onTap: () => _updateCount(false),
+                                            onTap:
+                                                state.singleProductFetchStatus ==
+                                                        DataFetchStatus.waiting
+                                                    ? () {}
+                                                    : () => _updateCount(false),
                                             child: Container(
                                               padding:
                                                   EdgeInsets.all(KRadius.r10),
@@ -300,7 +343,11 @@ class _CoffeeDetailSectionState extends State<CoffeeDetailSection> {
                                               }),
                                           7.horizontalSpace,
                                           InkWell(
-                                            onTap: () => _updateCount(true),
+                                            onTap:
+                                                state.singleProductFetchStatus ==
+                                                        DataFetchStatus.waiting
+                                                    ? () {}
+                                                    : () => _updateCount(true),
                                             child: Container(
                                               padding:
                                                   EdgeInsets.all(KRadius.r10),
@@ -357,23 +404,27 @@ class _CoffeeDetailSectionState extends State<CoffeeDetailSection> {
                                       controller: buttonController,
                                       color: ColorManager.primary,
                                       borderRadius: KRadius.r100,
-                                      onPressed: () {
-                                        final cartItem = CartItem(
-                                          id: widget.product?.id ?? '',
-                                          price: double.tryParse(
-                                                  widget.product?.price ??
-                                                      "") ??
-                                              0,
-                                          productName: widget.product?.name,
-                                          quantity: itemCount.value,
-                                          customerNote:
-                                              preferenceController.text.trim(),
-                                        );
-                                        context
-                                            .read<CartBloc>()
-                                            .add(AddToCartEvent(cartItem));
-                                        Navigator.pop(context);
-                                      },
+                                      onPressed: state.categoryFetchStatus ==
+                                              DataFetchStatus.waiting
+                                          ? () {}
+                                          : () {
+                                              final cartItem = CartItem(
+                                                id: widget.product?.id ?? '',
+                                                price: double.tryParse(
+                                                        widget.product?.price ??
+                                                            "") ??
+                                                    0,
+                                                productName:
+                                                    widget.product?.name,
+                                                quantity: itemCount.value,
+                                                customerNote:
+                                                    preferenceController.text
+                                                        .trim(),
+                                              );
+                                              context.read<CartBloc>().add(
+                                                  AddToCartEvent(cartItem));
+                                              Navigator.pop(context);
+                                            },
                                       text: 'Add to cart'),
                                 ),
                                 17.verticalSpace
@@ -399,6 +450,7 @@ class _CoffeeDetailSectionState extends State<CoffeeDetailSection> {
         return Image.asset(
           ImageAssets.coffee,
           width: double.infinity,
+          height: KHeight.h350,
           fit: BoxFit.cover,
         );
       }
@@ -411,6 +463,7 @@ class _CoffeeDetailSectionState extends State<CoffeeDetailSection> {
         decodedImage,
         fit: BoxFit.cover,
         width: double.infinity,
+        height: KHeight.h350,
         errorBuilder: (context, error, stackTrace) {
           return Icon(Icons.coffee, color: ColorManager.grey);
         },
@@ -420,8 +473,63 @@ class _CoffeeDetailSectionState extends State<CoffeeDetailSection> {
         ImageAssets.coffee,
         width: double.infinity,
         fit: BoxFit.cover,
+        height: KHeight.h350,
       );
     }
+  }
+}
+
+class RatingWidget extends StatelessWidget {
+  const RatingWidget({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding:
+          EdgeInsets.symmetric(horizontal: KPadding.h6, vertical: KPadding.v2),
+      margin: EdgeInsets.symmetric(
+          vertical: KPadding.v10, horizontal: KPadding.h10),
+      decoration: BoxDecoration(
+          color: ColorManager.fff6c0,
+          borderRadius: BorderRadius.circular(KRadius.r100)),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          SvgPicture.asset(SvgAssets.star),
+          Text('4.8'),
+          5.horizontalSpace,
+        ],
+      ),
+    );
+  }
+}
+
+class RatingWidgetShimmer extends StatelessWidget {
+  const RatingWidgetShimmer({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding:
+          EdgeInsets.symmetric(horizontal: KPadding.h6, vertical: KPadding.v2),
+      margin: EdgeInsets.symmetric(
+          vertical: KPadding.v10, horizontal: KPadding.h10),
+      decoration: BoxDecoration(
+          color: ColorManager.fff6c0,
+          borderRadius: BorderRadius.circular(KRadius.r100)),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          SvgPicture.asset(SvgAssets.star),
+          CommonShimmer(child: Text('4.8')),
+          5.horizontalSpace,
+        ],
+      ),
+    );
   }
 }
 

@@ -203,6 +203,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                     }
                     return null;
                   },
+                  keyboardType: TextInputType.phone,
                   controller: phoneNumberController,
                   fillColor: ColorManager.whiteColor,
                   hintText: '999 999 99 99',

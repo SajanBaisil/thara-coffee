@@ -43,6 +43,12 @@ class _HomeScreenState extends State<HomeScreen> {
     // WidgetsBinding.instance.addPostFrameCallback((_) {
     context.read<HomeBloc>().add(CategoryFetchEvent());
     // });
+
+    // searchController.addListener(() {
+    //   context
+    //       .read<HomeBloc>()
+    //       .add(SearchProductsEvent(searchController.text.trim()));
+    // });
   }
 
   @override
@@ -152,6 +158,11 @@ class _HomeScreenState extends State<HomeScreen> {
                                 fillColor: ColorManager.whiteColor,
                                 controller: searchController,
                                 borderColor: ColorManager.grey,
+                                onChanged: (value) {
+                                  context
+                                      .read<HomeBloc>()
+                                      .add(SearchProductsEvent(value));
+                                },
                                 suffix: Container(
                                   margin: EdgeInsets.all(KRadius.r5),
                                   decoration: BoxDecoration(
@@ -200,9 +211,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                             (BuildContext context, int index) {
                                           return CommonShimmer(
                                             child: CoffeeItemWidget(
+                                              onTap: () {},
                                               title: 'Iced',
-                                              color: ColorManager.f1f1f1,
+                                              borderColor: ColorManager.f1f1f1,
                                               icon: '',
+                                              textColor:
+                                                  ColorManager.greyTextColor,
                                             ),
                                           );
                                         },
@@ -214,10 +228,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                         horizontal: KPadding.h16),
                                     child: SizedBox(
                                       height: isSmallScreen
-                                          ? KHeight.h80
+                                          ? KHeight.h90
                                           : isLargeScreen
-                                              ? KHeight.h80
-                                              : KHeight.h80,
+                                              ? KHeight.h90
+                                              : KHeight.h90,
                                       child: ListView.separated(
                                         shrinkWrap: true,
                                         scrollDirection: Axis.horizontal,
@@ -228,19 +242,44 @@ class _HomeScreenState extends State<HomeScreen> {
                                         itemBuilder:
                                             (BuildContext context, int index) {
                                           return CoffeeItemWidget(
+                                            onTap: () {
+                                              context
+                                                  .read<HomeBloc>()
+                                                  .add(CategorySelectedEvent(
+                                                    state.categoryData?[index]
+                                                            .id ??
+                                                        '',
+                                                  ));
+                                            },
                                             title: state.categoryData?[index]
                                                     .name ??
                                                 '',
-                                            color: ColorManager.f1f1f1,
+                                            borderColor:
+                                                state.selectedCategoryIndex ==
+                                                        state
+                                                            .categoryData?[
+                                                                index]
+                                                            .id
+                                                    ? ColorManager.f1a01d
+                                                    : ColorManager.f1f1f1,
                                             icon: state.categoryData?[index]
                                                     .image ??
                                                 '',
+                                            textColor:
+                                                state.selectedCategoryIndex ==
+                                                        state
+                                                            .categoryData?[
+                                                                index]
+                                                            .id
+                                                    ? ColorManager.f1a01d
+                                                    : ColorManager
+                                                        .greyTextColor,
                                           );
                                         },
                                       ),
                                     ),
                                   ),
-                            10.verticalSpace,
+                            15.verticalSpace,
                             Padding(
                               padding: EdgeInsets.symmetric(
                                   horizontal: KPadding.h16),
@@ -595,34 +634,44 @@ class CoffeeItemWidget extends StatelessWidget {
     super.key,
     required this.title,
     required this.icon,
-    required this.color,
+    required this.borderColor,
+    required this.textColor,
+    required this.onTap,
   });
   final String title;
   final String icon;
-  final Color color;
+  final Color borderColor;
+  final Color? textColor;
+  final Function()? onTap;
 
   @override
   Widget build(BuildContext context) {
-    // Remove the data URI prefix if present
-    final String cleanBase64 =
-        icon.replaceAll(RegExp(r'data:image/\w+;base64,'), '');
-    return Column(
-      children: [
-        Container(
-          height: KHeight.h50,
-          width: KWidth.w50,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: color,
+    return InkWell(
+      onTap: onTap,
+      child: Column(
+        children: [
+          Container(
+            height: KHeight.h50,
+            width: KWidth.w50,
+            decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: ColorManager.f1f1f1,
+                border: Border.all(color: borderColor)),
+            child: ClipOval(child: _buildImage()),
           ),
-          child: ClipOval(child: _buildImage()),
-        ),
-        3.verticalSpace,
-        Text(
-          title,
-          style: textTheme(context).labelMedium,
-        )
-      ],
+          5.verticalSpace,
+          SizedBox(
+            width: KWidth.w70,
+            child: Text(
+              title,
+              maxLines: 2,
+              textAlign: TextAlign.center,
+              overflow: TextOverflow.ellipsis,
+              style: textTheme(context).labelMedium?.copyWith(color: textColor),
+            ),
+          )
+        ],
+      ),
     );
   }
 

@@ -4,7 +4,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:multi_state_button/multi_state_button.dart';
 import 'package:thara_coffee/feature/cart/logic/cart_bloc/cart_bloc.dart';
 import 'package:thara_coffee/feature/home/domain/model/cart_item.dart';
-import 'package:thara_coffee/feature/orders/widgets/payment_success_screen.dart';
 import 'package:thara_coffee/shared/components/assets_manager.dart';
 import 'package:thara_coffee/shared/components/primary_button.dart';
 import 'package:thara_coffee/shared/components/size_manager.dart';
@@ -65,7 +64,18 @@ class _OrdersScreenState extends State<OrdersScreen> {
                     child: CustomScrollView(
                       slivers: <Widget>[
                         items.isEmpty
-                            ? SizedBox()
+                            ? SliverToBoxAdapter(
+                                child: Padding(
+                                padding: EdgeInsets.only(top: 300.h),
+                                child: Center(
+                                  child: Text(
+                                    'No items in cart',
+                                    style: textTheme(context)
+                                        .headlineMedium
+                                        ?.copyWith(fontSize: KFontSize.f20),
+                                  ),
+                                ),
+                              ))
                             : SliverToBoxAdapter(
                                 child: Padding(
                                   padding: EdgeInsets.symmetric(
@@ -217,66 +227,31 @@ class _OrdersScreenState extends State<OrdersScreen> {
                               );
                             }),
                         // 25.verticalSpace,
-                        SliverToBoxAdapter(
-                          child: Padding(
-                            padding: EdgeInsets.only(
-                                top: 25.h, bottom: KPadding.v10),
-                            child: Text(
-                              'Order Summary',
-                              style: textTheme(context)
-                                  .headlineMedium
-                                  ?.copyWith(fontSize: KFontSize.f20),
+                        if (items.isNotEmpty)
+                          SliverToBoxAdapter(
+                            child: Padding(
+                              padding: EdgeInsets.only(
+                                  top: 25.h, bottom: KPadding.v10),
+                              child: Text(
+                                'Order Summary',
+                                style: textTheme(context)
+                                    .headlineMedium
+                                    ?.copyWith(fontSize: KFontSize.f20),
+                              ),
                             ),
                           ),
-                        ),
                         // 10.verticalSpace,
-                        SliverToBoxAdapter(
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: ColorManager.whiteColor,
-                              borderRadius: BorderRadius.circular(KRadius.r15),
-                            ),
-                            child: Column(
-                              children: [
-                                Padding(
-                                  padding: EdgeInsets.only(
-                                      right: 20.w,
-                                      top: 16.h,
-                                      left: 11.w,
-                                      bottom: 12.h),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        'Selected',
-                                        style: textTheme(context)
-                                            .titleSmall
-                                            ?.copyWith(
-                                              fontSize: KFontSize.f13,
-                                            ),
-                                      ),
-                                      BlocSelector<CartBloc, CartState, int>(
-                                        selector: (state) {
-                                          return state.totalSelectedItems;
-                                        },
-                                        builder: (context, totalSelectedItems) {
-                                          return Text(
-                                            totalSelectedItems.toString(),
-                                            style: textTheme(context)
-                                                .headlineMedium
-                                                ?.copyWith(
-                                                  fontSize: KFontSize.f14,
-                                                ),
-                                          );
-                                        },
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                ColoredBox(
-                                  color: ColorManager.f9f9f9,
-                                  child: Padding(
+                        if (items.isNotEmpty)
+                          SliverToBoxAdapter(
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: ColorManager.whiteColor,
+                                borderRadius:
+                                    BorderRadius.circular(KRadius.r15),
+                              ),
+                              child: Column(
+                                children: [
+                                  Padding(
                                     padding: EdgeInsets.only(
                                         right: 20.w,
                                         top: 16.h,
@@ -287,21 +262,21 @@ class _OrdersScreenState extends State<OrdersScreen> {
                                           MainAxisAlignment.spaceBetween,
                                       children: [
                                         Text(
-                                          'Sub total',
+                                          'Selected',
                                           style: textTheme(context)
                                               .titleSmall
                                               ?.copyWith(
                                                 fontSize: KFontSize.f13,
                                               ),
                                         ),
-                                        BlocSelector<CartBloc, CartState,
-                                            double>(
+                                        BlocSelector<CartBloc, CartState, int>(
                                           selector: (state) {
-                                            return state.totalAmount;
+                                            return state.totalSelectedItems;
                                           },
-                                          builder: (context, totalAmount) {
+                                          builder:
+                                              (context, totalSelectedItems) {
                                             return Text(
-                                              '₹ $totalAmount',
+                                              totalSelectedItems.toString(),
                                               style: textTheme(context)
                                                   .headlineMedium
                                                   ?.copyWith(
@@ -313,14 +288,8 @@ class _OrdersScreenState extends State<OrdersScreen> {
                                       ],
                                     ),
                                   ),
-                                ),
-                                ClipRRect(
-                                  borderRadius: BorderRadius.only(
-                                    bottomLeft: Radius.circular(KRadius.r15),
-                                    bottomRight: Radius.circular(KRadius.r15),
-                                  ),
-                                  child: ColoredBox(
-                                    color: ColorManager.fc545b,
+                                  ColoredBox(
+                                    color: ColorManager.f9f9f9,
                                     child: Padding(
                                       padding: EdgeInsets.only(
                                           right: 20.w,
@@ -332,7 +301,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
                                             MainAxisAlignment.spaceBetween,
                                         children: [
                                           Text(
-                                            'Payable Amount',
+                                            'Sub total',
                                             style: textTheme(context)
                                                 .titleSmall
                                                 ?.copyWith(
@@ -345,14 +314,10 @@ class _OrdersScreenState extends State<OrdersScreen> {
                                               return state.totalAmount;
                                             },
                                             builder: (context, totalAmount) {
-                                              final gstAmount =
-                                                  totalAmount * 0.05;
-                                              final payableAmount =
-                                                  totalAmount + gstAmount;
                                               return Text(
-                                                '₹ $payableAmount',
+                                                '₹ $totalAmount',
                                                 style: textTheme(context)
-                                                    .displayMedium
+                                                    .headlineMedium
                                                     ?.copyWith(
                                                       fontSize: KFontSize.f14,
                                                     ),
@@ -363,32 +328,82 @@ class _OrdersScreenState extends State<OrdersScreen> {
                                       ),
                                     ),
                                   ),
-                                ),
-                              ],
+                                  ClipRRect(
+                                    borderRadius: BorderRadius.only(
+                                      bottomLeft: Radius.circular(KRadius.r15),
+                                      bottomRight: Radius.circular(KRadius.r15),
+                                    ),
+                                    child: ColoredBox(
+                                      color: ColorManager.fc545b,
+                                      child: Padding(
+                                        padding: EdgeInsets.only(
+                                            right: 20.w,
+                                            top: 16.h,
+                                            left: 11.w,
+                                            bottom: 12.h),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text(
+                                              'Payable Amount',
+                                              style: textTheme(context)
+                                                  .titleSmall
+                                                  ?.copyWith(
+                                                    fontSize: KFontSize.f13,
+                                                  ),
+                                            ),
+                                            BlocSelector<CartBloc, CartState,
+                                                double>(
+                                              selector: (state) {
+                                                return state.totalAmount;
+                                              },
+                                              builder: (context, totalAmount) {
+                                                final gstAmount =
+                                                    totalAmount * 0.05;
+                                                final payableAmount =
+                                                    totalAmount + gstAmount;
+                                                return Text(
+                                                  '₹ $payableAmount',
+                                                  style: textTheme(context)
+                                                      .displayMedium
+                                                      ?.copyWith(
+                                                        fontSize: KFontSize.f14,
+                                                      ),
+                                                );
+                                              },
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
-                        ),
                         // 250.verticalSpace,
-                        SliverToBoxAdapter(
-                          child: Padding(
-                            padding: EdgeInsets.only(
-                                top: 50.h, bottom: KPadding.v10),
-                            child: PrimaryButton(
-                                key: Key('pay'),
-                                width: double.infinity,
-                                controller: payNowController,
-                                color: ColorManager.primary,
-                                borderRadius: KRadius.r100,
-                                onPressed: () {
-                                  // Navigator.push(
-                                  //     context,
-                                  //     MaterialPageRoute(
-                                  //         builder: (context) =>
-                                  //             PaymentSuccessScreen()));
-                                },
-                                text: 'Pay now'),
+                        if (items.isNotEmpty)
+                          SliverToBoxAdapter(
+                            child: Padding(
+                              padding: EdgeInsets.only(
+                                  top: 50.h, bottom: KPadding.v10),
+                              child: PrimaryButton(
+                                  key: Key('pay'),
+                                  width: double.infinity,
+                                  controller: payNowController,
+                                  color: ColorManager.primary,
+                                  borderRadius: KRadius.r100,
+                                  onPressed: () {
+                                    // Navigator.push(
+                                    //     context,
+                                    //     MaterialPageRoute(
+                                    //         builder: (context) =>
+                                    //             PaymentSuccessScreen()));
+                                  },
+                                  text: 'Pay now'),
+                            ),
                           ),
-                        ),
                       ],
                     ),
                   ),
