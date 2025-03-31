@@ -7,6 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:http/http.dart' as http;
+import 'package:thara_coffee/feature/login/screens/login_screen.dart';
+import 'package:thara_coffee/main.dart';
 import 'package:thara_coffee/shared/components/app_strings.dart';
 import 'package:thara_coffee/shared/components/size_manager.dart';
 import 'package:thara_coffee/shared/components/theme/color_manager.dart';
@@ -15,6 +17,7 @@ import 'package:thara_coffee/shared/domain/constants/global_variables.dart';
 import 'package:thara_coffee/shared/domain/helpers/adaptive_action.dart';
 import 'package:thara_coffee/shared/domain/helpers/snack_bar.dart';
 import 'package:thara_coffee/shared/extensions/on_string.dart';
+import 'package:thara_coffee/shared/local_storage/local_storage_service.dart';
 import 'package:thara_coffee/shared/router/http%20utils/http_service.dart';
 import 'package:thara_coffee/shared/router/http%20utils/model/http_fail_data.dart';
 import 'package:thara_coffee/shared/router/http%20utils/model/http_response_model.dart';
@@ -160,11 +163,12 @@ class HttpHelper {
     }
     final decodedData = HttpService().convertJsonToMap(response.body);
     if (response.statusCode == 401) {
-      if (_controller.isClosed) {
-        _controller = StreamController<UserTokenState>.broadcast();
-      }
+      // if (_controller.isClosed) {
+      //   _controller = StreamController<UserTokenState>.broadcast();
+      // }
 
-      _controller.add(UserTokenState.expired);
+      // _controller.add(UserTokenState.expired);
+      _handleUnauthorized();
     }
     if (response.statusCode != 200 || response.statusCode != 201) {
       final data = HttpFailData.fromJson(decodedData);
@@ -396,6 +400,25 @@ class HttpHelper {
         ),
       ),
     );
+  }
+
+  static void _handleUnauthorized() async {
+    try {
+      // Clear local storage
+      serviceLocator<LocalStorageService>().clearLocal();
+      // Clear any other storage if needed
+      // await secureStorage.deleteAll();
+
+      // Navigate to login screen
+      navigatorKey.currentState?.pushAndRemoveUntil(
+        MaterialPageRoute(
+          builder: (context) => const LoginScreen(),
+        ),
+        (route) => false,
+      );
+    } catch (e) {
+      log('Error handling unauthorized: $e');
+    }
   }
 }
 

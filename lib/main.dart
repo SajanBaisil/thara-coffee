@@ -8,6 +8,7 @@ import 'package:thara_coffee/feature/onboard/screens/on_board_screen.dart';
 import 'package:thara_coffee/shared/components/theme/theme_manager.dart';
 import 'package:thara_coffee/shared/service_locator_setup/setup.dart';
 
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   setUpServiceLocator();
@@ -51,6 +52,7 @@ class _MyAppState extends State<MyApp> {
                   primaryFocus?.unfocus();
                 },
                 child: MaterialApp(
+                  navigatorKey: navigatorKey,
                   title: 'Thara Coffee',
                   theme: getApplicationThemeLight(context),
                   home: OnBoardingScreen(),
