@@ -13,6 +13,13 @@ class CartBloc extends Bloc<CartEvent, CartState> {
 
   Future<void> _addToCart(AddToCartEvent event, Emitter<CartState> emit) async {
     try {
+      // Check if quantity is valid
+      if (event.item.quantity <= 0) {
+        emit(state.copyWith(
+          errorMessage: 'Invalid quantity. Please select at least 1 item.',
+        ));
+        return;
+      }
       final currentItems = List<CartItem>.from(state.items);
       final existingItemIndex =
           currentItems.indexWhere((item) => item.id == event.item.id);

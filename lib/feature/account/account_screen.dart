@@ -6,6 +6,7 @@ import 'package:thara_coffee/shared/components/assets_manager.dart';
 import 'package:thara_coffee/shared/components/size_manager.dart';
 import 'package:thara_coffee/shared/components/theme/color_manager.dart';
 import 'package:thara_coffee/shared/components/theme/theme_getters.dart';
+import 'package:thara_coffee/shared/components/web_page_screen.dart';
 import 'package:thara_coffee/shared/domain/constants/global_variables.dart';
 import 'package:thara_coffee/shared/local_storage/local_storage_service.dart';
 import 'package:thara_coffee/shared/router/http%20utils/http_helper.dart';
@@ -59,21 +60,37 @@ class _AccountScreenState extends State<AccountScreen> {
                     AccountListTileWidget(
                       title: 'About Us',
                       icon: SvgAssets.info,
+                      onTap: () {
+                        // Handle about us action
+                        navigateToVisitWebsite();
+                      },
                     ),
                     11.verticalSpace,
                     AccountListTileWidget(
                       title: 'Feedback',
                       icon: SvgAssets.feedback,
+                      onTap: () {
+                        // Handle feedback action
+                        navigateToVisitWebsite();
+                      },
                     ),
                     11.verticalSpace,
                     AccountListTileWidget(
                       title: 'Terms and conditions',
                       icon: SvgAssets.termsAndCondition,
+                      onTap: () {
+                        // Handle terms and conditions action
+                        navigateToVisitWebsite();
+                      },
                     ),
                     11.verticalSpace,
                     AccountListTileWidget(
                       title: 'Privacy Policy',
                       icon: SvgAssets.privacyPolicy,
+                      onTap: () {
+                        // Handle privacy policy action
+                        navigateToVisitWebsite();
+                      },
                     ),
                     19.verticalSpace,
                     InkWell(
@@ -114,6 +131,18 @@ class _AccountScreenState extends State<AccountScreen> {
     );
   }
 
+  void navigateToVisitWebsite() {
+    Navigator.push(
+      context,
+      MaterialPageRoute<void>(
+        builder: (context) => WebPageScreen(
+          url: 'https://www.tharacoffee.com',
+          webLoginType: WebLoginType.non,
+        ),
+      ),
+    );
+  }
+
   void _handleLogout() async {
     await serviceLocator<LocalStorageService>().clearLocal();
     // Perform any additional logout actions here
@@ -140,9 +169,11 @@ class AccountListTileWidget extends StatelessWidget {
     super.key,
     required this.title,
     required this.icon,
+    this.onTap,
   });
   final String title;
   final String icon;
+  final Function()? onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -152,6 +183,7 @@ class AccountListTileWidget extends StatelessWidget {
         borderRadius: BorderRadius.circular(10),
       ),
       leading: SvgPicture.asset(icon),
+      onTap: onTap,
       title: Text(
         title,
         style: textTheme(context).titleSmall?.copyWith(
