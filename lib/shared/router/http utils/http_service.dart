@@ -4,8 +4,6 @@ import 'dart:developer';
 import 'package:http/http.dart' as http;
 import 'package:thara_coffee/shared/domain/constants/global_variables.dart';
 import 'package:thara_coffee/shared/extensions/on_string.dart';
-import 'package:thara_coffee/shared/local_storage/keys.dart';
-import 'package:thara_coffee/shared/local_storage/local_storage_service.dart';
 
 class HttpService {
   factory HttpService() {
@@ -40,11 +38,6 @@ class HttpService {
   }
 
   Future<void> setAuthToken([String? tempToken]) async {
-    final token = tempToken ??
-        await serviceLocator<LocalStorageService>()
-            .getFromLocal(LocalStorageKeys.token);
-
-    _authToken = token;
     // assert(_authToken == null);
   }
 

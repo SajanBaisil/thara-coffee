@@ -28,3 +28,10 @@ class UpdateCartItemQuantityEvent extends CartEvent {
   @override
   List<Object> get props => [itemId, quantity];
 }
+
+// remove all cart items
+class RemoveAllCartItems extends CartEvent {
+  const RemoveAllCartItems();
+  @override
+  List<Object> get props => [];
+}

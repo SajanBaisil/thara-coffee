@@ -73,34 +73,13 @@ class LocalStorageService {
     final storage = serviceLocator<LocalStorageService>();
     final secureStorage = serviceLocator<FlutterSecureStorage>();
     final shared = await SharedPreferences.getInstance();
-    final tokens = await storage.getFromLocal(LocalStorageKeys.gatewayTokens);
-    final firstLaunchTime =
-        await storage.getFromLocal(LocalStorageKeys.firstLaunchTime);
-    final skippedVersion = await serviceLocator<LocalStorageService>()
-        .getFromLocal(LocalStorageKeys.skippedVersion);
+
     await Future.wait([
       secureStorage.deleteAll(
         iOptions: getIOSOptions(),
         aOptions: getAndroidOptions(),
       ),
       shared.clear(),
-    ]);
-    await Future.wait([
-      if (tokens != null)
-        saveToLocal(
-          tokens,
-          LocalStorageKeys.gatewayTokens,
-        ),
-      if (firstLaunchTime != null)
-        saveToLocal(
-          firstLaunchTime,
-          LocalStorageKeys.firstLaunchTime,
-        ),
-      if (skippedVersion != null)
-        saveToLocal(
-          skippedVersion,
-          LocalStorageKeys.skippedVersion,
-        ),
     ]);
   }
 
@@ -110,19 +89,6 @@ class LocalStorageService {
   }
 
   /// register as chat tour experienced
-  Future<void> registerAsChatTourExperienced() async {
-    await saveToLocal('true', LocalStorageKeys.showChatUpdateTour);
-  }
-
-  Future<void> registerAsSkippedForever() async {
-    await saveToLocal('true', LocalStorageKeys.showChatUpdateTour);
-  }
-
-  /// fetch chat tour experience status
-  Future<String?> fetchChatTourExperienceStatus() async {
-    final response = await getFromLocal(LocalStorageKeys.showChatUpdateTour);
-    return response;
-  }
 
 //local Storage security options
   IOSOptions getIOSOptions() => const IOSOptions(

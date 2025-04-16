@@ -9,6 +9,12 @@ class CartBloc extends Bloc<CartEvent, CartState> {
   CartBloc() : super(CartState()) {
     on<AddToCartEvent>(_addToCart);
     on<UpdateCartItemQuantityEvent>(_updateQuantity);
+    on<RemoveAllCartItems>(_removeAll);
+  }
+
+  Future<void> _removeAll(
+      RemoveAllCartItems event, Emitter<CartState> emit) async {
+    emit(state.copyWith(items: []));
   }
 
   Future<void> _addToCart(AddToCartEvent event, Emitter<CartState> emit) async {

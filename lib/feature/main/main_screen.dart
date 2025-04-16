@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:thara_coffee/feature/account/account_screen.dart';
+import 'package:thara_coffee/feature/cart/logic/payment_bloc/payment_bloc.dart';
 import 'package:thara_coffee/feature/cart/orders_screen.dart';
 import 'package:thara_coffee/feature/home/home_screen.dart';
 import 'package:thara_coffee/feature/home/logic/home_bloc/home_bloc.dart';
@@ -34,7 +35,10 @@ class _MainScreenState extends State<MainScreen> {
 
   final mainScreenViews = [
     const HomeScreen(),
-    const OrdersScreen(),
+    BlocProvider(
+      create: (context) => PaymentBloc(),
+      child: const OrdersScreen(),
+    ),
     const CartScreen(),
     const AccountScreen(),
   ];

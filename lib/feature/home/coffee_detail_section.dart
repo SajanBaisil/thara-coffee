@@ -51,7 +51,7 @@ class _CoffeeDetailSectionState extends State<CoffeeDetailSection> {
   void _updateCount(bool increment) {
     if (increment && itemCount.value < 99) {
       itemCount.value++;
-    } else if (!increment && itemCount.value > 1) {
+    } else if (!increment && itemCount.value >= 1) {
       itemCount.value--;
     }
   }
@@ -239,41 +239,49 @@ class _CoffeeDetailSectionState extends State<CoffeeDetailSection> {
                                       ),
                                 2.verticalSpace,
                                 Padding(
-                                  padding: EdgeInsets.only(
-                                    left: KPadding.h15,
-                                    right: KPadding.h15,
-                                  ),
-                                  child: state.singleProductFetchStatus ==
-                                          DataFetchStatus.waiting
-                                      ? CommonShimmer(
-                                          child: Text(
-                                              '''It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English.''',
-                                              style: textTheme(context)
-                                                  .labelMedium
-                                                  ?.copyWith(
-                                                      color: ColorManager
-                                                          .grey545454,
-                                                      fontSize: isSmallScreen
-                                                          ? KFontSize.f10
-                                                          : KFontSize.f13)),
-                                        )
-                                      : state.singleProduct?.description
-                                                  .isNullOrEmpty ??
-                                              false
-                                          ? SizedBox()
-                                          : Text(
-                                              state.singleProduct
-                                                      ?.description ??
-                                                  "",
-                                              style: textTheme(context)
-                                                  .labelMedium
-                                                  ?.copyWith(
-                                                      color: ColorManager
-                                                          .grey545454,
-                                                      fontSize: isSmallScreen
-                                                          ? KFontSize.f10
-                                                          : KFontSize.f13)),
-                                ),
+                                    padding: EdgeInsets.only(
+                                      left: KPadding.h15,
+                                      right: KPadding.h15,
+                                    ),
+                                    child: AnimatedSize(
+                                      duration: Duration(milliseconds: 300),
+                                      child: state.singleProductFetchStatus ==
+                                              DataFetchStatus.waiting
+                                          ? CommonShimmer(
+                                              child: Text(
+                                                  '''It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English.''',
+                                                  style: textTheme(context)
+                                                      .labelMedium
+                                                      ?.copyWith(
+                                                          color: ColorManager
+                                                              .grey545454,
+                                                          fontSize:
+                                                              isSmallScreen
+                                                                  ? KFontSize
+                                                                      .f10
+                                                                  : KFontSize
+                                                                      .f13)),
+                                            )
+                                          : state.singleProduct?.description
+                                                      .isNullOrEmpty ??
+                                                  false
+                                              ? SizedBox()
+                                              : Text(
+                                                  state.singleProduct
+                                                          ?.description ??
+                                                      "",
+                                                  style: textTheme(context)
+                                                      .labelMedium
+                                                      ?.copyWith(
+                                                          color: ColorManager
+                                                              .grey545454,
+                                                          fontSize:
+                                                              isSmallScreen
+                                                                  ? KFontSize
+                                                                      .f10
+                                                                  : KFontSize
+                                                                      .f13)),
+                                    )),
                                 15.verticalSpace,
                                 Padding(
                                   padding: EdgeInsets.only(
@@ -408,6 +416,12 @@ class _CoffeeDetailSectionState extends State<CoffeeDetailSection> {
                                               DataFetchStatus.waiting
                                           ? () {}
                                           : () {
+                                              if (itemCount.value == 0) {
+                                                _showSnackBar(
+                                                    'Please select quantity',
+                                                    SnackBarType.error);
+                                                return;
+                                              }
                                               final cartItem = CartItem(
                                                 id: widget.product?.id ?? '',
                                                 price: double.tryParse(
@@ -441,6 +455,16 @@ class _CoffeeDetailSectionState extends State<CoffeeDetailSection> {
           },
         ),
       ),
+    );
+  }
+
+  void _showSnackBar(String message, SnackBarType type) {
+    HttpHelper.handleMessage(
+      message,
+      context,
+      title: 'Quantity',
+      type: HandleTypes.dialogue,
+      snackBarType: type,
     );
   }
 

@@ -5,10 +5,7 @@ import 'package:thara_coffee/shared/local_storage/keys.dart';
 import 'package:thara_coffee/shared/local_storage/local_storage_service.dart';
 
 class GlobalSetters {
-  static Future<void> storeTokenToLocal(String? token) async {
-    await serviceLocator<LocalStorageService>()
-        .saveToLocal(token.toString(), LocalStorageKeys.token);
-  }
+  static Future<void> storeTokenToLocal(String? token) async {}
 
   static Future<void> saveLoginResponseToLocal(
     LoginResponse response,

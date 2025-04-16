@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:thara_coffee/feature/cart/logic/cart_bloc/cart_bloc.dart';
 import 'package:thara_coffee/feature/home/logic/home_bloc/home_bloc.dart';
 import 'package:thara_coffee/feature/login/logic/login_bloc/login_bloc.dart';
+import 'package:thara_coffee/feature/orders/orders_bloc/orders_bloc.dart';
 import 'package:thara_coffee/feature/splash/splash_screen.dart';
 import 'package:thara_coffee/shared/components/theme/theme_manager.dart';
 import 'package:thara_coffee/shared/service_locator_setup/setup.dart';
@@ -44,6 +45,9 @@ class _MyAppState extends State<MyApp> {
                 ),
                 BlocProvider(
                   create: (context) => CartBloc(),
+                ),
+                BlocProvider(
+                  create: (context) => OrdersBloc(),
                 ),
               ],
               child: GestureDetector(

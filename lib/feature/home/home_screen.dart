@@ -40,15 +40,6 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    // WidgetsBinding.instance.addPostFrameCallback((_) {
-    context.read<HomeBloc>().add(CategoryFetchEvent());
-    // });
-
-    // searchController.addListener(() {
-    //   context
-    //       .read<HomeBloc>()
-    //       .add(SearchProductsEvent(searchController.text.trim()));
-    // });
   }
 
   @override

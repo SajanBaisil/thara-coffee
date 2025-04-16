@@ -17,13 +17,12 @@ class LoginService extends LoginRepository {
     final data = {
       'name': name,
       'mobile': mobile,
-      'company_id': companyId,
+      'company_id': int.tryParse(companyId) ?? 1,
     };
-    final response = await HttpHelper.getDataFromServer(
-      Endpoints.customer,
-      data: data,
-    );
-    final loginResponse = LoginResponse.fromJson(response.responseBody);
+    final response = await HttpHelper.getDataFromServer(Endpoints.customer,
+        data: data, requestType: RequestType.get);
+    final loginResponse =
+        LoginResponse.fromJson(response.responseBody['data'][0]);
     if (!response.success) {
       throw ApiException(response.message, response.responseCode);
     }

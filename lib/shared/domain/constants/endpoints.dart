@@ -1,4 +1,5 @@
 // final String _baseUrl = 'https://erp-stage.tharacoffee.com';
+
 final String _baseUrl = 'https://maretek.addonez.com';
 const String _api = '/api';
 const String _view = '/view';
@@ -15,4 +16,6 @@ class Endpoints {
   static final String category = '$productEndpoint/category';
   static final String product = '$getEndpoint/products';
   static final String singleProduct = '$viewEndpoint/product';
+  static final String createPosOrder = '$endpoint/create_pos_order';
+  static final String getPosOrder = '$viewEndpoint/posorders';
 }
