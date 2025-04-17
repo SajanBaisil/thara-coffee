@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:thara_coffee/feature/home/domain/model/cart_item.dart';
+import 'package:thara_coffee/shared/components/datafetch_status.dart';
 
 part 'cart_event.dart';
 part 'cart_state.dart';
@@ -19,9 +20,13 @@ class CartBloc extends Bloc<CartEvent, CartState> {
 
   Future<void> _addToCart(AddToCartEvent event, Emitter<CartState> emit) async {
     try {
+      emit(state.copyWith(
+        addToCartFetchStatus: DataFetchStatus.waiting,
+      ));
       // Check if quantity is valid
       if (event.item.quantity <= 0) {
         emit(state.copyWith(
+          addToCartFetchStatus: DataFetchStatus.failed,
           errorMessage: 'Invalid quantity. Please select at least 1 item.',
         ));
         return;
@@ -84,6 +89,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
       }
     } catch (e) {
       emit(state.copyWith(
+        addToCartFetchStatus: DataFetchStatus.failed,
         errorMessage: 'Failed to update quantity: ${e.toString()}',
       ));
     }
@@ -102,6 +108,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
 
     emit(state.copyWith(
       items: items,
+      addToCartFetchStatus: DataFetchStatus.success,
       totalAmount: totalAmount,
       totalSelectedItems: totalItems,
     ));

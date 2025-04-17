@@ -148,26 +148,27 @@ class _CartScreenState extends State<CartScreen> {
                                 ),
                               )
                             : SliverPadding(
-                                padding: EdgeInsets.symmetric(horizontal: 17.w),
+                                padding: EdgeInsets.only(
+                                    left: 17.w, right: 17.w, bottom: 10.h),
                                 sliver: SliverList.separated(
                                   separatorBuilder: (context, index) =>
                                       5.verticalSpace,
-                                  itemCount: state.posOrders?.data?.length,
+                                  itemCount: state.posOrders?.allLines.length,
                                   itemBuilder: (context, index) => OrderWidget(
-                                    amount: state.posOrders?.data?[index]
-                                            .amountTotal ??
+                                    amount: state.posOrders?.allLines[index]
+                                            .subtotal ??
                                         "",
                                     cookingStatus: 'Ready',
                                     // state.posOrders?.data?[index].state ??
                                     // "",
-                                    productQty: state.posOrders?.data?[index]
-                                            .lines?[0].qty ??
+                                    productQty:
+                                        state.posOrders?.allLines[index].qty ??
+                                            "",
+                                    title: state.posOrders?.allLines[index]
+                                            .product ??
                                         "",
-                                    title: state.posOrders?.data?[index]
-                                            .lines?[0].product ??
-                                        "",
-                                    subTitle: state.posOrders?.data?[index]
-                                            .lines?[0].customerNote ??
+                                    subTitle: state.posOrders?.allLines[index]
+                                            .customerNote ??
                                         "",
                                     color: ColorManager.redColorWithAlpha,
                                     borderColor: ColorManager.primary,
@@ -212,6 +213,20 @@ class OrderWidget extends StatelessWidget {
         color: ColorManager.whiteColor,
         border: Border.all(color: ColorManager.eee),
         borderRadius: BorderRadius.circular(KRadius.r15),
+        boxShadow: [
+          BoxShadow(
+            color: ColorManager.secondary.withOpacity(0.08),
+            offset: const Offset(0, 4),
+            blurRadius: 12,
+            spreadRadius: 0,
+          ),
+          BoxShadow(
+            color: ColorManager.secondary.withOpacity(0.04),
+            offset: const Offset(0, 2),
+            blurRadius: 4,
+            spreadRadius: 0,
+          ),
+        ],
       ),
       child: Column(
         children: [

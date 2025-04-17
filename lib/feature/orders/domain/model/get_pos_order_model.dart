@@ -22,6 +22,19 @@ class GetPosOrdersModel with EquatableMixin {
     success = json['success'];
   }
 
+  // Add this getter to get all lines in a single list
+  List<Lines> get allLines {
+    final List<Lines> allLines = [];
+    if (data != null) {
+      for (var order in data!) {
+        if (order.lines != null) {
+          allLines.addAll(order.lines!);
+        }
+      }
+    }
+    return allLines;
+  }
+
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     if (this.data != null) {

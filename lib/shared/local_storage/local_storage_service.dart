@@ -73,7 +73,7 @@ class LocalStorageService {
     final storage = serviceLocator<LocalStorageService>();
     final secureStorage = serviceLocator<FlutterSecureStorage>();
     final shared = await SharedPreferences.getInstance();
-
+    storage.removeFromLocal(LocalStorageKeys.loginResponse);
     await Future.wait([
       secureStorage.deleteAll(
         iOptions: getIOSOptions(),

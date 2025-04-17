@@ -156,7 +156,10 @@ class _OrdersScreenState extends State<OrdersScreen> {
                                   ),
                                 ),
                           // 16.verticalSpace,
-                          SliverList.builder(
+                          SliverList.separated(
+                              separatorBuilder: (context, index) {
+                                return 5.verticalSpace;
+                              },
                               itemCount: items.length,
                               itemBuilder: (context, index) {
                                 return Container(
@@ -170,6 +173,22 @@ class _OrdersScreenState extends State<OrdersScreen> {
                                     border: Border.all(color: ColorManager.eee),
                                     borderRadius:
                                         BorderRadius.circular(KRadius.r15),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: ColorManager.secondary
+                                            .withOpacity(0.08),
+                                        offset: const Offset(0, 4),
+                                        blurRadius: 12,
+                                        spreadRadius: 0,
+                                      ),
+                                      BoxShadow(
+                                        color: ColorManager.secondary
+                                            .withOpacity(0.04),
+                                        offset: const Offset(0, 2),
+                                        blurRadius: 4,
+                                        spreadRadius: 0,
+                                      ),
+                                    ],
                                   ),
                                   child: Column(
                                     children: [
@@ -318,6 +337,22 @@ class _OrdersScreenState extends State<OrdersScreen> {
                                   color: ColorManager.whiteColor,
                                   borderRadius:
                                       BorderRadius.circular(KRadius.r15),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: ColorManager.secondary
+                                          .withOpacity(0.08),
+                                      offset: const Offset(0, 4),
+                                      blurRadius: 12,
+                                      spreadRadius: 0,
+                                    ),
+                                    BoxShadow(
+                                      color: ColorManager.secondary
+                                          .withOpacity(0.04),
+                                      offset: const Offset(0, 2),
+                                      blurRadius: 4,
+                                      spreadRadius: 0,
+                                    ),
+                                  ],
                                 ),
                                 child: Column(
                                   children: [
